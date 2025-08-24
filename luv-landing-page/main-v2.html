@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveStream Pro - Nền Tảng Livestream Hàng Đầu</title>
+    <meta name="description" content="Nền tảng livestream chuyên nghiệp với phí hoa hồng thấp, công nghệ AI và trải nghiệm tuyệt vời">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+        
+        :root {
+            /* Light Mode Colors */
+            --primary-light: #FF3366;
+            --secondary-light: #6C63FF;
+            --bg-light: #F8F9FA;
+            --bg-light-secondary: #FFFFFF;
+            --text-light: #2D3748;
+            --text-light-secondary: #718096;
+            
+            /* Dark Mode Colors */
+            --primary-dark: #FF6B9B;
+            --secondary-dark: #8C84FF;
+            --bg-dark: #1A1B1E;
+            --bg-dark-secondary: #2C2D32;
+            --text-dark: #F7FAFC;
+            --text-dark-secondary: #CBD5E0;
+            
+            /* Current Theme */
+            --primary: var(--primary-light);
+            --secondary: var(--secondary-light);
+            --bg-primary: var(--bg-light);
+            --bg-secondary: var(--bg-light-secondary);
+            --text-primary: var(--text-light);
+            --text-secondary: var(--text-light-secondary);
+        }
+        
+        [data-theme="dark"] {
+            --primary: var(--primary-dark);
+            --secondary: var(--secondary-dark);
+            --bg-primary: var(--bg-dark);
+            --bg-secondary: var(--bg-dark-secondary);
+            --text-primary: var(--text-dark);
+            --text-secondary: var(--text-dark-secondary);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+        
+        .poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Glassmorphism Effects */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="dark"] .glass {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Material Design Shadows */
+        .shadow-material {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .shadow-material-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Gradient Buttons */
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 51, 102, 0.3);
+        }
+        
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-gradient:hover::before {
+            left: 100%;
+        }
+        
+        /* Live Indicator */
+        .live-indicator {
+            background: #FF0000;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Viewer Count Animation */
+        .viewer-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .viewer-number {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Category Filter */
+        .category-filter {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        
+        .category-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .category-btn.active,
+        .category-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Streamer Cards */
+        .streamer-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .streamer-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .streamer-thumbnail {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .streamer-card:hover .streamer-thumbnail {
+            transform: scale(1.1);
+        }
+        
+        .streamer-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 20px;
+            color: white;
+        }
+        
+        /* Particles Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--text-secondary);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="dark"] .theme-toggle {
+            background: var(--primary);
+        }
+        
+        [data-theme="dark"] .theme-toggle::before {
+            transform: translateX(30px);
+        }
+        
+        /* Loading Animation */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 51, 102, 0.3);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Gift Animation */
+        .gift-animation {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            font-size: 24px;
+            animation: giftFloat 3s ease-out forwards;
+        }
+        
+        @keyframes giftFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem !important;
+            }
+            
+            .category-filter {
+                justify-content: center;
+            }
+            
+            .btn-gradient {
+                padding: 10px 24px;
+                font-size: 14px;
+            }
+        }
+        
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+    
+    <!-- Navigation -->
+    <nav class="glass fixed w-full top-0 z-50 px-4 py-3">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-video text-white text-lg"></i>
+                </div>
+                <span class="poppins text-2xl font-bold" style="color: var(--primary)">LiveStream Pro</span>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#features" class="hover:text-pink-500 transition-colors font-medium">Tính Năng</a>
+                <a href="#streamers" class="hover:text-pink-500 transition-colors font-medium">Streamers</a>
+                <a href="#how-it-works" class="hover:text-pink-500 transition-colors font-medium">Cách Hoạt Động</a>
+                <a href="#pricing" class="hover:text-pink-500 transition-colors font-medium">Giá Cả</a>
+                <div class="theme-toggle" onclick="toggleTheme()"></div>
+                <button class="btn-gradient">Đăng Ký Ngay</button>
+            </div>
+            
+            <button class="md:hidden text-2xl" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center px-4 pt-20" data-aos="fade-up">
+        <div class="container mx-auto text-center">
+            <div class="glass rounded-3xl p-12 max-w-4xl mx-auto">
+                <h1 class="hero-title poppins text-6xl md:text-7xl font-black mb-6" style="color: var(--primary)">
+                    LiveStream Pro
+                </h1>
+                <p class="text-2xl md:text-3xl mb-4 font-semibold" style="color: var(--secondary)">
+                    Nền Tảng Livestream Thế Hệ Mới
+                </p>
+                <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto opacity-80">
+                    Trải nghiệm livestream đỉnh cao với công nghệ AI, phí hoa hồng thấp nhất và cộng đồng triệu người dùng
+                </p>
+                
+                <!-- Live Stats -->
+                <div class="flex justify-center items-center gap-8 mb-8 flex-wrap">
+                    <div class="flex items-center gap-2">
+                        <div class="live-indicator">LIVE</div>
+                        <span class="font-semibold">2,847 streamers</span>
+                    </div>
+                    <div class="viewer-count">
+                        <i class="fas fa-eye"></i>
+                        <span class="viewer-number" id="total-viewers">1,234,567</span>
+                        <span>người xem</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-gift" style="color: var(--primary)"></i>
+                        <span class="font-semibold">50M+ quà tặng/ngày</span>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button class="btn-gradient text-xl px-8 py-4" onclick="scrollToRegister()">
+                        <i class="fas fa-rocket mr-2"></i>
+                        Bắt Đầu Livestream
+                    </button>
+                    <button class="glass px-8 py-4 rounded-full font-semibold hover:bg-white/20 transition-all">
+                        <i class="fas fa-play mr-2"></i>
+                        Xem Demo
+                    </button>
+                </div>
+                
+                <p class="text-sm mt-4 opacity-70">
+                    🎁 Miễn phí 30 ngày đầu • Không phí ẩn • Hỗ trợ 24/7
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="py-20 px-4" id="features" data-aos="fade-up">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="poppins text-4xl md:text-5xl font-bold mb-6" style="color: var(--primary)">
+                    Tính Năng Đột Phá
+                </h2>
+                <p class="text-xl max-w-2xl mx-auto opacity-80">
+                    Công nghệ tiên tiến giúp bạn tạo ra những buổi livestream chuyên nghiệp và thu hút
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass rounded-2xl p-8 text-center hover:transform hover:scale-105 transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-brain text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">AI Thông Minh</h3>
+                    <p class="opacity-80 mb-4">Tối ưu nội dung, gợi ý thời gian live và phân tích audience để tăng thu nhập</p>
+                    <ul class="text-left space-y-2 text-sm">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Phân tích thời gian tối ưu</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Gợi ý nội dung trending</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Auto-moderation chat</li>
+                    </ul>
+                </div>
+                
+                <div class="glass rounded-2xl p-8 text-center hover:transform hover:scale-105 transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-coins text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Phí Thấp Nhất</h3>
+                    <p class="opacity-80 mb-4">Chỉ 3% phí hoa hồng - thấp nhất thị trường, giúp bạn tối đa hóa lợi nhuận</p>
+                    <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg p-4 mb-4">
+                        <div class="text-3xl font-bold">3%</div>
+                        <div class="text-sm">Phí hoa hồng</div>
+                    </div>
+                    <p class="text-sm opacity-70">So với 15-25% của các nền tảng khác</p>
+                </div>
+                
+                <div class="glass rounded-2xl p-8 text-center hover:transform hover:scale-105 transition-all duration-300" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-bolt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Công Nghệ 4K</h3>
+                    <p class="opacity-80 mb-4">Stream chất lượng 4K 60fps với độ trễ thấp và ổn định tuyệt đối</p>
+                    <div class="flex justify-center gap-4 text-sm">
+                        <div class="bg-red-500 text-white px-3 py-1 rounded">4K</div>
+                        <div class="bg-blue-500 text-white px-3 py-1 rounded">60FPS</div>
+                        <div class="bg-green-500 text-white px-3 py-1 rounded">Low Latency</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Popular Streamers Section -->
+    <section class="py-20 px-4" id="streamers" data-aos="fade-up">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="poppins text-4xl md:text-5xl font-bold mb-6" style="color: var(--primary)">
+                    Streamers Nổi Bật
+                </h2>
+                <p class="text-xl max-w-2xl mx-auto opacity-80">
+                    Khám phá những streamer hàng đầu đang live trên nền tảng
+                </p>
+            </div>
+            
+            <!-- Category Filter -->
+            <div class="category-filter justify-center mb-12">
+                <button class="category-btn active" onclick="filterCategory('all')">Tất Cả</button>
+                <button class="category-btn" onclick="filterCategory('gaming')">Gaming</button>
+                <button class="category-btn" onclick="filterCategory('music')">Âm Nhạc</button>
+                <button class="category-btn" onclick="filterCategory('talk')">Talk Show</button>
+                <button class="category-btn" onclick="filterCategory('beauty')">Làm Đẹp</button>
+                <button class="category-btn" onclick="filterCategory('cooking')">Nấu Ăn</button>
+            </div>
+            
+            <!-- Streamers Grid -->
+            <div class="grid md:grid-cols-4 gap-6" id="streamers-grid">
+                <!-- Streamer Card 1 -->
+                <div class="streamer-card glass shadow-material-lg" data-category="gaming" data-aos="fade-up" data-aos-delay="100">
+                    <div class="relative">
+                        <div class="streamer-thumbnail bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                            <i class="fas fa-gamepad text-white text-6xl"></i>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                            <div class="live-indicator">LIVE</div>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <div class="viewer-count bg-black/50 px-2 py-1 rounded text-white">
+                                <i class="fas fa-eye"></i>
+                                <span class="viewer-number">12.5K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="streamer-overlay">
+                        <h4 class="font-bold text-lg mb-1">Gaming Master</h4>
+                        <p class="text-sm opacity-80 mb-2">Valorant Ranked • Challenger</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs bg-purple-500 px-2 py-1 rounded">Gaming</span>
+                            <button class="text-xs bg-white/20 px-2 py-1 rounded hover:bg-white/30 transition-all" onclick="sendGift(this)">
+                                <i class="fas fa-gift mr-1"></i>Gift
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Streamer Card 2 -->
+                <div class="streamer-card glass shadow-material-lg" data-category="music" data-aos="fade-up" data-aos-delay="200">
+                    <div class="relative">
+                        <div class="streamer-thumbnail bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center">
+                            <i class="fas fa-music text-white text-6xl"></i>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                            <div class="live-indicator">LIVE</div>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <div class="viewer-count bg-black/50 px-2 py-1 rounded text-white">
+                                <i class="fas fa-eye"></i>
+                                <span class="viewer-number">8.3K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="streamer-overlay">
+                        <h4 class="font-bold text-lg mb-1">Melody Queen</h4>
+                        <p class="text-sm opacity-80 mb-2">Acoustic Cover • Chill Vibes</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs bg-blue-500 px-2 py-1 rounded">Music</span>
+                            <button class="text-xs bg-white/20 px-2 py-1 rounded hover:bg-white/30 transition-all" onclick="sendGift(this)">
+                                <i class="fas fa-gift mr-1"></i>Gift
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Streamer Card 3 -->
+                <div class="streamer-card glass shadow-material-lg" data-category="talk" data-aos="fade-up" data-aos-delay="300">
+                    <div class="relative">
+                        <div class="streamer-thumbnail bg-gradient-to-br from-green-400 to-emerald-400 flex items-center justify-center">
+                            <i class="fas fa-microphone text-white text-6xl"></i>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                            <div class="live-indicator">LIVE</div>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <div class="viewer-count bg-black/50 px-2 py-1 rounded text-white">
+                                <i class="fas fa-eye"></i>
+                                <span class="viewer-number">15.7K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="streamer-overlay">
+                        <h4 class="font-bold text-lg mb-1">Talk Show Pro</h4>
+                        <p class="text-sm opacity-80 mb-2">Tech Review • Q&A Session</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs bg-green-500 px-2 py-1 rounded">Talk</span>
+                            <button class="text-xs bg-white/20 px-2 py-1 rounded hover:bg-white/30 transition-all" onclick="sendGift(this)">
+                                <i class="fas fa-gift mr-1"></i>Gift
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Streamer Card 4 -->
+                <div class="streamer-card glass shadow-material-lg" data-category="beauty" data-aos="fade-up" data-aos-delay="400">
+                    <div class="relative">
+                        <div class="streamer-thumbnail bg-gradient-to-br from-pink-400 to-rose-400 flex items-center justify-center">
+                            <i class="fas fa-palette text-white text-6xl"></i>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                            <div class="live-indicator">LIVE</div>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <div class="viewer-count bg-black/50 px-2 py-1 rounded text-white">
+                                <i class="fas fa-eye"></i>
+                                <span class="viewer-number">9.2K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="streamer-overlay">
+                        <h4 class="font-bold text-lg mb-1">Beauty Guru</h4>
+                        <p class="text-sm opacity-80 mb-2">Makeup Tutorial • Skincare Tips</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs bg-pink-500 px-2 py-1 rounded">Beauty</span>
+                            <button class="text-xs bg-white/20 px-2 py-1 rounded hover:bg-white/30 transition-all" onclick="sendGift(this)">
+                                <i class="fas fa-gift mr-1"></i>Gift
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="btn-gradient">
+                    <i class="fas fa-plus mr-2"></i>
+                    Xem Thêm Streamers
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works Section -->
+    <section class="py-20 px-4" id="how-it-works" data-aos="fade-up">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="poppins text-4xl md:text-5xl font-bold mb-6" style="color: var(--primary)">
+                    Cách Hoạt Động
+                </h2>
+                <p class="text-xl max-w-2xl mx-auto opacity-80">
+                    Chỉ 3 bước đơn giản để bắt đầu kiếm tiền từ livestream
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-20 h-20 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold">
+                        1
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Đăng Ký Tài Khoản</h3>
+                    <p class="opacity-80 mb-6">Tạo tài khoản miễn phí chỉ trong 30 giây. Xác thực danh tính để đảm bảo an toàn.</p>
+                    <div class="glass rounded-lg p-4">
+                        <i class="fas fa-user-plus text-4xl mb-2" style="color: var(--primary)"></i>
+                        <p class="text-sm">Hoàn toàn miễn phí</p>
+                    </div>
+                </div>
+                
+                <div class="text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold">
+                        2
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Thiết Lập Studio</h3>
+                    <p class="opacity-80 mb-6">Cài đặt phần mềm, kết nối camera và micro. Hướng dẫn chi tiết từ A-Z.</p>
+                    <div class="glass rounded-lg p-4">
+                        <i class="fas fa-video text-4xl mb-2" style="color: var(--secondary)"></i>
+                        <p class="text-sm">Hỗ trợ 24/7</p>
+                    </div>
+                </div>
+                
+                <div class="text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold">
+                        3
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Bắt Đầu Kiếm Tiền</h3>
+                    <p class="opacity-80 mb-6">Go live và nhận quà tặng từ người xem. Rút tiền tức thì 24/7.</p>
+                    <div class="glass rounded-lg p-4">
+                        <i class="fas fa-money-bill-wave text-4xl mb-2" style="color: var(--primary)"></i>
+                        <p class="text-sm">Rút tiền tức thì</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Live Categories Section -->
+    <section class="py-20 px-4" data-aos="fade-up">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="poppins text-4xl md:text-5xl font-bold mb-6" style="color: var(--primary)">
+                    Danh Mục Livestream
+                </h2>
+                <p class="text-xl max-w-2xl mx-auto opacity-80">
+                    Đa dạng nội dung cho mọi sở thích và đam mê
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass rounded-2xl p-6 text-center hover:transform hover:scale-105 transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-gamepad text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Gaming</h3>
+                    <p class="text-sm opacity-80 mb-3">Esports, Mobile Games, PC Games</p>
+                    <div class="text-2xl font-bold" style="color: var(--primary)">2,847</div>
+                    <div class="text-xs opacity-60">streamers online</div>
+                </div>
+                
+                <div class="glass rounded-2xl p-6 text-center hover:transform hover:scale-105 transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-music text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Âm Nhạc</h3>
+                    <p class="text-sm opacity-80 mb-3">Cover, Sáng tác, DJ Set</p>
+                    <div class="text-2xl font-bold" style="color: var(--primary)">1,234</div>
+                    <div class="text-xs opacity-60">streamers online</div>
+                </div>
+                
+                <div class="glass rounded-2xl p-6 text-center hover:transform hover:scale-105 transition-all duration-300" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-utensils text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Nấu Ăn</h3>
+                    <p class="text-sm opacity-80 mb-3">Recipes, Food Review, Baking</p>
+                    <div class="text-2xl font-bold" style="color: var(--primary)">567</div>
+                    <div class="text-xs opacity-60">streamers online</div>
+                </div>
+                
+                <div class="glass rounded-2xl p-6 text-center hover:transform hover:scale-105 transition-all duration-300" data-aos="fade-up" data-aos-delay="400">
+                    <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-palette text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Làm Đẹp</h3>
+                    <p class="text-sm opacity-80 mb-3">Makeup, Skincare, Fashion</p>
+                    <div class="text-2xl font-bold" style="color: var(--primary)">892</div>
+                    <div class="text-xs opacity-60">streamers online</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pricing Section -->
+    <section class="py-20 px-4" id="pricing" data-aos="fade-up">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="poppins text-4xl md:text-5xl font-bold mb-6" style="color: var(--primary)">
+                    Bảng Giá & Hoa Hồng
+                </h2>
+                <p class="text-xl max-w-2xl mx-auto opacity-80">
+                    Minh bạch, công bằng và có lợi nhất cho streamers
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Free Plan -->
+                <div class="glass rounded-2xl p-8 text-center" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="text-2xl font-bold mb-4">Starter</h3>
+                    <div class="text-4xl font-black mb-2" style="color: var(--primary)">Miễn Phí</div>
+                    <p class="text-sm opacity-80 mb-6">30 ngày đầu</p>
+                    <ul class="text-left space-y-3 mb-8">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Livestream không giới hạn</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Chất lượng HD 1080p</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Chat cơ bản</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Hỗ trợ email</li>
+                    </ul>
+                    <button class="w-full glass py-3 rounded-lg font-semibold hover:bg-white/20 transition-all">
+                        Đăng Ký Miễn Phí
+                    </button>
+                </div>
+                
+                <!-- Pro Plan -->
+                <div class="glass rounded-2xl p-8 text-center border-2 border-pink-500 relative" data-aos="fade-up" data-aos-delay="200">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                        Phổ Biến
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Pro</h3>
+                    <div class="text-4xl font-black mb-2" style="color: var(--primary)">3%</div>
+                    <p class="text-sm opacity-80 mb-6">hoa hồng từ quà tặng</p>
+                    <ul class="text-left space-y-3 mb-8">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Tất cả tính năng Starter</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Chất lượng 4K 60fps</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>AI Analytics</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Rút tiền tức thì</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Hỗ trợ 24/7</li>
+                    </ul>
+                    <button class="w-full btn-gradient py-3 rounded-lg font-semibold">
+                        Chọn Gói Pro
+                    </button>
+                </div>
+                
+                <!-- Enterprise Plan -->
+                <div class="glass rounded-2xl p-8 text-center" data-aos="fade-up" data-aos-delay="300">
+                    <h3 class="text-2xl font-bold mb-4">Enterprise</h3>
+                    <div class="text-4xl font-black mb-2" style="color: var(--primary)">Tùy Chỉnh</div>
+                    <p class="text-sm opacity-80 mb-6">cho doanh nghiệp</p>
+                    <ul class="text-left space-y-3 mb-8">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Tất cả tính năng Pro</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>White-label solution</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>API tùy chỉnh</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Dedicated support</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>SLA 99.9%</li>
+                    </ul>
+                    <button class="w-full glass py-3 rounded-lg font-semibold hover:bg-white/20 transition-all">
+                        Liên Hệ Tư Vấn
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Comparison Table -->
+            <div class="mt-16 glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="400">
+                <h3 class="text-2xl font-bold text-center mb-8">So Sánh Với Đối Thủ</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-center">
+                        <thead>
+                            <tr class="border-b border-white/20">
+                                <th class="py-4 text-left">Tính Năng</th>
+                                <th class="py-4">LiveStream Pro</th>
+                                <th class="py-4">Đối Thủ A</th>
+                                <th class="py-4">Đối Thủ B</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-white/10">
+                                <td class="py-4 text-left">Phí hoa hồng</td>
+                                <td class="py-4 font-bold text-green-500">3%</td>
+                                <td class="py-4 text-red-500">15%</td>
+                                <td class="py-4 text-red-500">25%</td>
+                            </tr>
+                            <tr class="border-b border-white/10">
+                                <td class="py-4 text-left">Chất lượng video</td>
+                                <td class="py-4 font-bold text-green-500">4K 60fps</td>
+                                <td class="py-4">1080p 30fps</td>
+                                <td class="py-4">720p 30fps</td>
+                            </tr>
+                            <tr class="border-b border-white/10">
+                                <td class="py-4 text-left">Rút tiền</td>
+                                <td class="py-4 font-bold text-green-500">Tức thì</td>
+                                <td class="py-4">7-14 ngày</td>
+                                <td class="py-4">14-30 ngày</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 text-left">AI Analytics</td>
+                                <td class="py-4 font-bold text-green-500">✓</td>
+                                <td class="py-4 text-red-500">✗</td>
+                                <td class="py-4 text-red-500">✗</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Registration CTA Section -->
+    <section class="py-20 px-4" id="register" data-aos="fade-up">
+        <div class="container mx-auto max-w-4xl">
+            <div class="glass rounded-3xl p-12 text-center">
+                <h2 class="poppins text-4xl md:text-5xl font-bold mb-6" style="color: var(--primary)">
+                    Sẵn Sàng Bắt Đầu?
+                </h2>
+                <p class="text-xl mb-8 opacity-80">
+                    Tham gia cộng đồng hơn 100,000 streamers đang kiếm tiền mỗi ngày
+                </p>
+                
+                <!-- Registration Form -->
+                <form class="max-w-2xl mx-auto space-y-6" id="registrationForm">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <input type="text" placeholder="Họ và tên *" class="glass px-4 py-3 rounded-lg w-full" required>
+                        <input type="email" placeholder="Email *" class="glass px-4 py-3 rounded-lg w-full" required>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <input type="tel" placeholder="Số điện thoại *" class="glass px-4 py-3 rounded-lg w-full" required>
+                        <select class="glass px-4 py-3 rounded-lg w-full" required>
+                            <option value="">Chọn danh mục yêu thích</option>
+                            <option value="gaming">Gaming</option>
+                            <option value="music">Âm nhạc</option>
+                            <option value="talk">Talk show</option>
+                            <option value="beauty">Làm đẹp</option>
+                            <option value="cooking">Nấu ăn</option>
+                            <option value="other">Khác</option>
+                        </select>
+                    </div>
+                    <textarea placeholder="Kinh nghiệm livestream của bạn..." class="glass px-4 py-3 rounded-lg w-full h-24 resize-none"></textarea>
+                    
+                    <div class="flex items-center justify-center gap-3">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms" class="text-sm">
+                            Tôi đồng ý với <a href="#" class="text-pink-500 hover:underline">Điều khoản sử dụng</a> và 
+                            <a href="#" class="text-purple-500 hover:underline">Chính sách bảo mật</a>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn-gradient text-xl px-12 py-4">
+                        <i class="fas fa-rocket mr-2"></i>
+                        Đăng Ký Miễn Phí Ngay!
+                    </button>
+                    
+                    <p class="text-sm opacity-70">
+                        🎁 Bonus 500K khi hoàn thành 10 buổi live đầu tiên
+                    </p>
+                </form>
+                
+                <!-- Download Apps -->
+                <div class="mt-12 pt-8 border-t border-white/20">
+                    <h3 class="text-xl font-bold mb-6">Tải Ứng Dụng</h3>
+                    <div class="flex justify-center gap-4 flex-wrap">
+                        <button class="glass px-6 py-3 rounded-lg flex items-center gap-3 hover:bg-white/20 transition-all">
+                            <i class="fab fa-apple text-2xl"></i>
+                            <div class="text-left">
+                                <div class="text-xs opacity-70">Download on the</div>
+                                <div class="font-semibold">App Store</div>
+                            </div>
+                        </button>
+                        <button class="glass px-6 py-3 rounded-lg flex items-center gap-3 hover:bg-white/20 transition-all">
+                            <i class="fab fa-google-play text-2xl"></i>
+                            <div class="text-left">
+                                <div class="text-xs opacity-70">Get it on</div>
+                                <div class="font-semibold">Google Play</div>
+                            </div>
+                        </button>
+                        <button class="glass px-6 py-3 rounded-lg flex items-center gap-3 hover:bg-white/20 transition-all">
+                            <i class="fab fa-windows text-2xl"></i>
+                            <div class="text-left">
+                                <div class="text-xs opacity-70">Download for</div>
+                                <div class="font-semibold">Windows</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ Section -->
+    <section class="py-20 px-4" data-aos="fade-up">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-16">
+                <h2 class="poppins text-4xl md:text-5xl font-bold mb-6" style="color: var(--primary)">
+                    Câu Hỏi Thường Gặp
+                </h2>
+                <p class="text-xl opacity-80">
+                    Giải đáp mọi thắc mắc của bạn về nền tảng
+                </p>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="glass rounded-lg overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-white/10 transition-all" onclick="toggleFAQ(this)">
+                        <span class="font-semibold">Làm sao để bắt đầu livestream trên nền tảng?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="px-6 pb-4 hidden">
+                        <p class="opacity-80">Chỉ cần đăng ký tài khoản, xác thực danh tính, tải app và bạn có thể bắt đầu livestream ngay lập tức. Chúng tôi có hướng dẫn chi tiết từng bước.</p>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-lg overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-white/10 transition-all" onclick="toggleFAQ(this)">
+                        <span class="font-semibold">Phí hoa hồng 3% có áp dụng cho tất cả giao dịch?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="px-6 pb-4 hidden">
+                        <p class="opacity-80">Đúng vậy, chúng tôi chỉ thu 3% từ tổng giá trị quà tặng bạn nhận được. Không có phí ẩn, phí rút tiền hay bất kỳ chi phí nào khác.</p>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-lg overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-white/10 transition-all" onclick="toggleFAQ(this)">
+                        <span class="font-semibold">Tôi có thể rút tiền khi nào và như thế nào?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="px-6 pb-4 hidden">
+                        <p class="opacity-80">Bạn có thể rút tiền bất kỳ lúc nào 24/7 với số tiền tối thiểu 50,000 VNĐ. Tiền sẽ được chuyển vào tài khoản ngân hàng trong vòng 5 phút.</p>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-lg overflow-hidden" data-aos="fade-up" data-aos-delay="400">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-white/10 transition-all" onclick="toggleFAQ(this)">
+                        <span class="font-semibold">AI Analytics hoạt động như thế nào?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="px-6 pb-4 hidden">
+                        <p class="opacity-80">AI của chúng tôi phân tích hành vi người xem, thời gian online tối ưu, nội dung trending để đưa ra gợi ý giúp bạn tăng thu nhập và tương tác.</p>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-lg overflow-hidden" data-aos="fade-up" data-aos-delay="500">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-white/10 transition-all" onclick="toggleFAQ(this)">
+                        <span class="font-semibold">Có hỗ trợ kỹ thuật 24/7 không?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="px-6 pb-4 hidden">
+                        <p class="opacity-80">Có, chúng tôi có đội ngũ hỗ trợ kỹ thuật 24/7 qua chat, email và hotline. Thời gian phản hồi trung bình dưới 5 phút.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-16 px-4 border-t border-white/10">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-video text-white text-lg"></i>
+                        </div>
+                        <span class="poppins text-2xl font-bold" style="color: var(--primary)">LiveStream Pro</span>
+                    </div>
+                    <p class="opacity-80 mb-6">Nền tảng livestream hàng đầu Việt Nam với công nghệ AI và phí hoa hồng thấp nhất thị trường.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-all">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-all">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-all">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-all">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold mb-6" style="color: var(--primary)">Sản Phẩm</h4>
+                    <ul class="space-y-3 opacity-80">
+                        <li><a href="#" class="hover:text-pink-500 transition-colors">Livestream Platform</a></li>
+                        <li><a href="#" class="hover:text-pink-500 transition-colors">Mobile App</a></li>
+                        <li><a href="#" class="hover:text-pink-500 transition-colors">Desktop App</a></li>
+                        <li><a href="#" class="hover:text-pink-500 transition-colors">Creator Tools</a></li>
+                        <li><a href="#" class="hover:text-pink-500 transition-colors">Analytics</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold mb-6" style="color: var(--secondary)">Hỗ Trợ</h4>
+                    <ul class="space-y-3 opacity-80">
+                        <li><a href="#" class="hover:text-purple-500 transition-colors">Trung tâm trợ giúp</a></li>
+                        <li><a href="#" class="hover:text-purple-500 transition-colors">Hướng dẫn livestream</a></li>
+                        <li><a href="#" class="hover:text-purple-500 transition-colors">Community</a></li>
+                        <li><a href="#" class="hover:text-purple-500 transition-colors">Liên hệ</a></li>
+                        <li><a href="#" class="hover:text-purple-500 transition-colors">Báo cáo lỗi</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold mb-6" style="color: var(--primary)">Liên Hệ</h4>
+                    <div class="space-y-3 opacity-80">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-phone w-5"></i>
+                            <span>1900 1234</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-envelope w-5"></i>
+                            <span>support@livestreampro.vn</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-map-marker-alt w-5"></i>
+                            <span>TP. Hồ Chí Minh, Việt Nam</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h5 class="font-semibold mb-3">Nhận thông báo mới</h5>
+                        <div class="flex gap-2">
+                            <input type="email" placeholder="Email của bạn" class="glass px-3 py-2 rounded-lg flex-1 text-sm">
+                            <button class="btn-gradient px-4 py-2 text-sm">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 pt-8 text-center">
+                <p class="opacity-60">© 2024 LiveStream Pro. Tất cả quyền được bảo lưu.</p>
+                <div class="flex justify-center gap-6 mt-4 text-sm opacity-60">
+                    <a href="#" class="hover:opacity-100 transition-opacity">Điều khoản sử dụng</a>
+                    <a href="#" class="hover:opacity-100 transition-opacity">Chính sách bảo mật</a>
+                    <a href="#" class="hover:opacity-100 transition-opacity">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+        <div class="text-center">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="text-white">Đang xử lý...</p>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+        
+        // Initialize Particles
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#FF3366' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: '#6C63FF', opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 6, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
+            },
+            retina_detect: true
+        });
+        
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+        
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        // Animated Counter for Viewers
+        function animateCounter() {
+            const counter = document.getElementById('total-viewers');
+            const target = 1234567;
+            let current = 1000000;
+            const increment = target / 100;
+            
+            const timer = setInterval(() => {
+                current += increment + Math.random() * 1000;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                counter.textContent = Math.floor(current).toLocaleString();
+            }, 50);
+        }
+        
+        // Category Filter
+        function filterCategory(category) {
+            const buttons = document.querySelectorAll('.category-btn');
+            const cards = document.querySelectorAll('.streamer-card');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeIn 0.5s ease';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Gift Animation
+        function sendGift(button) {
+            const gifts = ['🎁', '💎', '🌟', '❤️', '🔥', '👑'];
+            const gift = gifts[Math.floor(Math.random() * gifts.length)];
+            
+            const giftElement = document.createElement('div');
+            giftElement.className = 'gift-animation';
+            giftElement.textContent = gift;
+            giftElement.style.left = button.getBoundingClientRect().left + 'px';
+            giftElement.style.top = button.getBoundingClientRect().top + 'px';
+            
+            document.body.appendChild(giftElement);
+            
+            setTimeout(() => {
+                giftElement.remove();
+            }, 3000);
+            
+            // Button feedback
+            button.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+            }, 150);
+        }
+        
+        // FAQ Toggle
+        function toggleFAQ(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('i');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+        
+        // Form Submission
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const overlay = document.getElementById('loading-overlay');
+            overlay.classList.remove('hidden');
+            
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                
+                // Success animation
+                const button = e.target.querySelector('button[type="submit"]');
+                const originalText = button.innerHTML;
+                
+                button.innerHTML = '<i class="fas fa-check mr-2"></i>Đăng Ký Thành Công!';
+                button.style.background = 'linear-gradient(135deg, #10B981, #059669)';
+                
+                // Confetti effect
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        const confetti = document.createElement('div');
+                        confetti.style.position = 'fixed';
+                        confetti.style.left = Math.random() * 100 + '%';
+                        confetti.style.top = '-10px';
+                        confetti.style.width = '10px';
+                        confetti.style.height = '10px';
+                        confetti.style.backgroundColor = ['#FF3366', '#6C63FF', '#10B981', '#F59E0B'][Math.floor(Math.random() * 4)];
+                        confetti.style.borderRadius = '50%';
+                        confetti.style.pointerEvents = 'none';
+                        confetti.style.zIndex = '9999';
+                        confetti.style.animation = 'giftFloat 3s linear forwards';
+                        
+                        document.body.appendChild(confetti);
+                        
+                        setTimeout(() => {
+                            confetti.remove();
+                        }, 3000);
+                    }, i * 50);
+                }
+                
+                setTimeout(() => {
+                    alert('🎉 Chúc mừng! Bạn đã đăng ký thành công. Chúng tôi sẽ liên hệ trong 24h!');
+                    button.innerHTML = originalText;
+                    button.style.background = '';
+                }, 2000);
+            }, 2000);
+        });
+        
+        // Smooth Scroll
+        function scrollToRegister() {
+            document.getElementById('register').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+        
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            alert('Mobile menu sẽ được phát triển trong phiên bản tiếp theo!');
+        }
+        
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Hero animation
+        gsap.from('.hero-title', {
+            duration: 1.5,
+            y: 100,
+            opacity: 0,
+            ease: 'power3.out'
+        });
+        
+        // Floating animation for cards
+        gsap.to('.streamer-card', {
+            y: -10,
+            duration: 2,
+            ease: 'power2.inOut',
+            yoyo: true,
+            repeat: -1,
+            stagger: 0.2
+        });
+        
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            animateCounter();
+            
+            // Add hover effects to buttons
+            document.querySelectorAll('.btn-gradient').forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    gsap.to(this, { scale: 1.05, duration: 0.3 });
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    gsap.to(this, { scale: 1, duration: 0.3 });
+                });
+            });
+        });
+        
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all sections
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9741515f40b209fc',t:'MTc1NjAyMjQ0Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
